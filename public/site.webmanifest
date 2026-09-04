@@ -1,0 +1,12 @@
+{
+  "name": "PrintParkk — Premium T-Shirt Design Services",
+  "short_name": "PrintParkk",
+  "description": "Custom T-shirt design studio",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0B0B0F",
+  "theme_color": "#0B0B0F",
+  "icons": [
+    { "src": "/icon.svg", "sizes": "any", "type": "image/svg+xml" }
+  ]
+}

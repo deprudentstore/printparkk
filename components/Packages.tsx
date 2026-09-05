@@ -1,13 +1,38 @@
+import { connectDB } from "@/lib/mongodb";
+import PackageModel from "@/models/Package";
 import { Icon } from "./Icons";
 
+const FALLBACK_PACKAGES = [
+  {
+    name: "Basic",
+    tagline: "Perfect for startups & individuals",
+    price: 49,
+    popular: false,
+    features: ["1 Custom T-Shirt Design", "2 Revisions", "3-5 Business Days Delivery", "High-Resolution File"]
+  },
+  {
+    name: "Standard",
+    tagline: "Great for growing brands",
+    price: 99,
+    popular: true,
+    features: ["2 Custom T-Shirt Designs", "Unlimited Revisions", "2-3 Business Days Delivery", "Source File Included"]
+  },
+  {
+    name: "Business",
+    tagline: "For businesses & bulk orders",
+    price: 179,
+    popular: false,
+    features: ["5 Custom T-Shirt Designs", "Unlimited Revisions", "1-2 Business Days Delivery", "Source File + Mockups"]
+  }
+];
+
 async function getPackages() {
-  const base = process.env.NEXT_PUBLIC_BASE_URL || "";
   try {
-    const res = await fetch(`${base}/api/packages`, { cache: "no-store" });
-    const json = await res.json();
-    return json.data;
+    await connectDB();
+    const packages = await PackageModel.find().sort({ order: 1 }).lean();
+    return packages.length ? packages : FALLBACK_PACKAGES;
   } catch {
-    return [];
+    return FALLBACK_PACKAGES;
   }
 }
 

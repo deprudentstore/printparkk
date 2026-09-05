@@ -1,13 +1,31 @@
+import { connectDB } from "@/lib/mongodb";
+import TestimonialModel from "@/models/Testimonial";
 import { Icon } from "./Icons";
 
+const FALLBACK_TESTIMONIALS = [
+  {
+    name: "James Carter",
+    role: "Clothing Brand Owner",
+    quote: "PrintParkk nailed exactly what I imagined. The design quality is top notch and communication was great!",
+    avatar: "https://randomuser.me/api/portraits/men/32.jpg",
+    rating: 5
+  },
+  {
+    name: "Sarah Johnson",
+    role: "Entrepreneur",
+    quote: "Fast delivery, unlimited revisions and amazing creativity. Highly recommend!",
+    avatar: "https://randomuser.me/api/portraits/women/44.jpg",
+    rating: 5
+  }
+];
+
 async function getTestimonials() {
-  const base = process.env.NEXT_PUBLIC_BASE_URL || "";
   try {
-    const res = await fetch(`${base}/api/testimonials`, { cache: "no-store" });
-    const json = await res.json();
-    return json.data;
+    await connectDB();
+    const testimonials = await TestimonialModel.find().lean();
+    return testimonials.length ? testimonials : FALLBACK_TESTIMONIALS;
   } catch {
-    return [];
+    return FALLBACK_TESTIMONIALS;
   }
 }
 

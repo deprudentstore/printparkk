@@ -1,13 +1,24 @@
 import Image from "next/image";
+import { connectDB } from "@/lib/mongodb";
+import DesignModel from "@/models/Design";
+import heroData from "@/data/images.json";
+
+const FALLBACK_DESIGNS = [
+  { title: "Stay Wild", category: "Streetwear", image: heroData.designs["Stay Wild"] },
+  { title: "Animals", category: "Animals", image: heroData.designs["Animals"] },
+  { title: "Explore the Unknown", category: "Space", image: heroData.designs["Explore the Unknown"] },
+  { title: "Anime", category: "Anime", image: heroData.designs["Anime"] },
+  { title: "Classic", category: "Vintage", image: heroData.designs["Classic"] },
+  { title: "The Howling Call", category: "Adventure", image: heroData.designs["The Howling Call"] }
+];
 
 async function getDesigns() {
-  const base = process.env.NEXT_PUBLIC_BASE_URL || "";
   try {
-    const res = await fetch(`${base}/api/designs`, { cache: "no-store" });
-    const json = await res.json();
-    return json.data;
+    await connectDB();
+    const designs = await DesignModel.find().sort({ order: 1 }).lean();
+    return designs.length ? designs : FALLBACK_DESIGNS;
   } catch {
-    return [];
+    return FALLBACK_DESIGNS;
   }
 }
 

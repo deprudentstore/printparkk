@@ -1,13 +1,25 @@
+import { connectDB } from "@/lib/mongodb";
+import CategoryModel from "@/models/Category";
 import { Icon } from "./Icons";
 
+const FALLBACK_CATEGORIES = [
+  { name: "Streetwear", icon: "shirt" },
+  { name: "Typography", icon: "type" },
+  { name: "Anime", icon: "sparkles" },
+  { name: "Animals", icon: "paw" },
+  { name: "Vintage", icon: "camera" },
+  { name: "Adventure", icon: "mountain" },
+  { name: "Funny", icon: "smile" },
+  { name: "Custom", icon: "wrench" }
+];
+
 async function getCategories() {
-  const base = process.env.NEXT_PUBLIC_BASE_URL || "";
   try {
-    const res = await fetch(`${base}/api/categories`, { cache: "no-store" });
-    const json = await res.json();
-    return json.data;
+    await connectDB();
+    const categories = await CategoryModel.find().sort({ order: 1 }).lean();
+    return categories.length ? categories : FALLBACK_CATEGORIES;
   } catch {
-    return [];
+    return FALLBACK_CATEGORIES;
   }
 }
 

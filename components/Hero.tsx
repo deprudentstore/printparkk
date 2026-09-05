@@ -52,6 +52,7 @@ export default function Hero() {
                 fill
                 sizes="200px"
                 priority={i === 0}
+                unoptimized
                 className="object-cover"
               />
             </div>

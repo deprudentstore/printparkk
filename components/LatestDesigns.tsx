@@ -38,7 +38,7 @@ export default async function LatestDesigns() {
         {designs.map((d: any, i: number) => (
           <div key={d.title + i} className="group">
             <div className="relative aspect-square rounded-xl overflow-hidden bg-black/5">
-              <Image src={d.image} alt={d.title} fill sizes="220px" className="object-cover group-hover:scale-105 transition-transform duration-300" />
+              <Image src={d.image} alt={d.title} fill sizes="220px" unoptimized className="object-cover group-hover:scale-105 transition-transform duration-300" />
             </div>
             <p className="mt-2 text-sm font-semibold text-dark">{d.title}</p>
             <p className="text-xs text-black/50">{d.category}</p>
